@@ -63,7 +63,7 @@ jobs:
           sudo eget "https://bin.ajam.dev/x86_64_Linux/anew" --to "/usr/local/bin/anew"
           #anew-rs
           sudo eget "https://bin.ajam.dev/x86_64_Linux/anew-rs" --to "/usr/local/bin/anew-rs"
-          anew -h
+          anew-rs -h
           #httpx
           sudo eget "https://bin.ajam.dev/x86_64_Linux/httpx" --to "/usr/local/bin/httpx"
           httpx -h
