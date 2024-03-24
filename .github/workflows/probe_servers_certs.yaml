@@ -121,7 +121,19 @@ jobs:
           sudo chmod +xwr "./probe_servers_certs.sh"
           # Run
           # Always run with STD_OUT + STD_IN >/dev/null
-          bash "./probe_servers_certs.sh" >/dev/null 2>&1
+          #bash "./probe_servers_certs.sh" >/dev/null 2>&1
+          bash "./probe_servers_certs.sh" >/tmp/ivn.log 2>&1
           #Debug
           bash "./probe_servers_certs.sh"
+        continue-on-error: true
+
+      - name: Upload Logs
+        uses: actions/upload-artifact@v4
+        with:
+            name: IVN_Logs
+            path: |
+              /tmp/ivn.log
+            compression-level: 0 # no compression, [Default: 6 (GNU Gzip)]
+            retention-days: 1
+            overwrite: true
         continue-on-error: true
