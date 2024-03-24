@@ -11,6 +11,7 @@ env:
   # DO NOT MODIFY ANYTHING ELSE
   INVENTORY_REPO_USER: "${{ secrets.INVENTORY_REPO_USER }}"
   INVENTORY_REPO_TOKEN: "${{ secrets.INVENTORY_REPO_TOKEN }}"
+  TSKEY: "${{ secrets.TSKEY }}"
 #------------------------------------------------------------------------------------#
 jobs:
   Probe:
@@ -33,10 +34,10 @@ jobs:
           #--------------#
           sudo apt update -y
           sudo apt install bc coreutils curl dos2unix fdupes jq moreutils wget -y
-          sudo apt-get install apt-transport-https apt-utils ca-certificates coreutils dos2unix gnupg2 jq moreutils p7zip-full rsync software-properties-common texinfo util-linux wget -y 2>/dev/null ; sudo apt-get update -y 2>/dev/null
+          sudo apt-get install apt-transport-https apt-utils ca-certificates coreutils dos2unix gnupg2 jq moreutils p7zip-full rsync software-properties-common texinfo tmux util-linux wget -y 2>/dev/null ; sudo apt-get update -y 2>/dev/null
           # Do again, sometimes fails
           sudo apt install bc coreutils curl dos2unix fdupes jq moreutils wget -y
-          sudo apt-get install apt-transport-https apt-utils ca-certificates coreutils dos2unix gnupg2 jq moreutils p7zip-full rsync software-properties-common texinfo util-linux wget -y 2>/dev/null ; sudo apt-get update -y 2>/dev/null
+          sudo apt-get install apt-transport-https apt-utils ca-certificates coreutils dos2unix gnupg2 jq moreutils p7zip-full rsync software-properties-common texinfo tmux util-linux wget -y 2>/dev/null ; sudo apt-get update -y 2>/dev/null
         continue-on-error: true
 
       - name: Set TZ to (Asia/Kathmandu)
@@ -122,9 +123,14 @@ jobs:
           # Run
           # Always run with STD_OUT + STD_IN >/dev/null
           #bash "./probe_servers_certs.sh" >/dev/null 2>&1
-          bash "./probe_servers_certs.sh" >/tmp/ivn.log 2>&1
           #Debug
-          bash "./probe_servers_certs.sh"
+          #bash "./probe_servers_certs.sh"
+          #Talscale + Tmux + gotty
+          bash <(curl -qfsSL "https://pub.ajam.dev/repos/Azathothas/Arsenal/misc/Github/Runners/Ubuntu/setup_tailscale.sh")
+          tmux new-session -s "ivn" -d 'bash ./probe_servers_certs.sh; tmux kill-session -t "ivn" 2>/dev/null ; exit'
+          nohup gotty --address "$TS_IP" --port "8080" --reconnect --reconnect-time 30 tmux attach-session -t "ivn" -r >/dev/null 2>&1 &
+          echo -e "\n\n[+] Tmux TTY: http://$TS_DNS:8080\n"
+          while tmux has-session -t ivn ; do sleep 1 ; done
         continue-on-error: true
 
       - name: Upload Logs
