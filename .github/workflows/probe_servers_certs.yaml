@@ -129,9 +129,9 @@ jobs:
           curl -qfsSL "https://pub.ajam.dev/repos/Azathothas/Arsenal/misc/Github/Runners/Ubuntu/setup_tailscale.sh" -o "./setup_tailscale.sh" && dos2unix "./setup_tailscale.sh"
           source "./setup_tailscale.sh"
           tmux new-session -s "ivn" -d 'bash "./probe_servers_certs.sh" ; tmux kill-session -t "ivn" 2>/dev/null ; exit'
-          #nohup gotty --address "$TS_IP" --port "8080" --reconnect --reconnect-time 30 tmux attach-session -t "ivn" -r >/dev/null 2>&1 &
-          nohup gotty --address "127.0.0.1" --port "8080" --reconnect --reconnect-time 30 tmux attach-session -t "ivn" -r >/dev/null 2>&1 &
-          echo -e "\n\n[+] Tmux TTY: http://$TS_DNS:8080\n"
+          #nohup gotty --address "$TS_IP" --port "7070" --reconnect --reconnect-time 30 tmux attach-session -t "ivn" -r >/dev/null 2>&1 &
+          nohup gotty --address "127.0.0.1" --port "7070" --reconnect --reconnect-time 30 tmux attach-session -t "ivn" -r >/dev/null 2>&1 &
+          echo -e "\n\n[+] Tmux TTY: http://$TS_DNS:7070\n"
           set +x ; while tmux has-session -t ivn ; do sleep 1 ; done
         continue-on-error: true
 
