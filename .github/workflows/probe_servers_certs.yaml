@@ -123,5 +123,5 @@ jobs:
           # Always run with STD_OUT + STD_IN >/dev/null
           bash "./probe_servers_certs.sh" >/dev/null 2>&1
           #Debug
-          #bash "./probe_servers_certs.sh"
+          bash "./probe_servers_certs.sh"
         continue-on-error: true
