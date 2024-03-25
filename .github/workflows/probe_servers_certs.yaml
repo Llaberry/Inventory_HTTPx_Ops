@@ -115,10 +115,10 @@ jobs:
           set +x ; set +e
           #--------------#
           #Check
-          pg_isready --host="crt.sh" --port="5432" --username="guest" --dbname="certwatch" --timeout="10"
-          if [ $? -eq 1 ] || [ $? -eq 2 ] || [ $? -eq 3 ]; then
+          if pg_isready --host="crt.sh" --port="5432" --username="guest" --dbname="certwatch" --timeout="10" | grep -q "no response"; then
               echo -e "\n[-] Failed to connect to crt.sh\n"
-              curl -qfsSL "https://crt.sh" -I
+              curl -qfksSL "https://crt.sh" -I
+            exit 1
           else
              # Download
              curl -qfsSL "https://$INVENTORY_REPO_USER:$INVENTORY_REPO_TOKEN@raw.githubusercontent.com/Azathothas/Inventory/main/.github/scripts/probe_servers_certs.sh" -o "./probe_servers_certs.sh"
