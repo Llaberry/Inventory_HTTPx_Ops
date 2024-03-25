@@ -115,9 +115,9 @@ jobs:
           set +x ; set +e
           #--------------#
           #Check
-          if pg_isready --host="crt.sh" --port="5432" --username="guest" --dbname="certwatch" --timeout="10" | grep -q "no response"; then
+          if pg_isready --host="crt.sh" --port="5432" --username="guest" --dbname="certwatch" --timeout="10" | grep -q "no response" || curl -qfksSL -A "Chrome" -I "https://crt.sh" --write-out "%{http_code}" -o /dev/null | grep -q 502; then
               echo -e "\n[-] Failed to connect to crt.sh\n"
-              curl -qfksSL "https://crt.sh" -I
+              curl -qfksSL -A "Chrome" "https://crt.sh" -I
             exit 1
           else
              # Download
